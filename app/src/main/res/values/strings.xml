@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">MVVMTemplate</string>
+
+    <string name="message_check_internet_connection">Please check your network connection and try again</string>
+    <string name="label_something_went_wrong">Something went wrong</string>
+
+    <string name="time_1h">1H</string>
+    <string name="time_24h">24H</string>
+    <string name="time_7d">7D</string>
+    <string name="time_1m">1M</string>
+    <string name="time_3m">3M</string>
+    <string name="time_1y">1Y</string>
+    <string name="time_all_time">All time</string>
+
+    <string name="price_usd_vs_time">price (usd) vs time</string>
+    <string name="building_chart">Building chart…</string>
+
+    <string name="powered_by">Powered by</string>
+    <string name="coin_gecko_logo">CoinGeckoLogo</string>
+
+    <string name="coin_image">Coin image</string>
+
 </resources>
