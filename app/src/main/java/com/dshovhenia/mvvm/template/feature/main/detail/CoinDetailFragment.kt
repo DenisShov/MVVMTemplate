@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.dshovhenia.mvvm.template.Constants
 import com.dshovhenia.mvvm.template.R
 import com.dshovhenia.mvvm.template.core.extension.formatPrice
-import com.dshovhenia.mvvm.template.core.extension.gone
 import com.dshovhenia.mvvm.template.core.extension.observe
 import com.dshovhenia.mvvm.template.data.entity.CoinMarkets
 import com.dshovhenia.mvvm.template.data.entity.CryptoChartData
@@ -49,7 +48,6 @@ class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnCli
 
     private fun observeEvents() {
         observe(viewModel.cryptoChartLiveData) {
-            binding.loadingViewChart.gone()
             setChartData(it)
         }
     }
