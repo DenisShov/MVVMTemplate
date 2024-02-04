@@ -15,37 +15,45 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val frameworkModule = module {
-    single { Dispatchers.IO }
-}
-
-fun networkModule(networkLogging: Boolean) = module {
-    single(apiBaseUrlNamed) { BuildConfig.API_BASE_URL }
-    single { provideGson() }
-    single { provideHttpClient(networkLogging) }
-    single {
-        provideCoinGeckoApi(
-            baseUrl = get(apiBaseUrlNamed), get(), get()
-        )
+val frameworkModule =
+    module {
+        single { Dispatchers.IO }
     }
-}
 
-val storeModule = module {
-    single { GetCoinsMarketsStore(get()) }
-    single { GetCoinChartStore(get()) }
-}
+fun networkModule(networkLogging: Boolean) =
+    module {
+        single(apiBaseUrlNamed) { BuildConfig.API_BASE_URL }
+        single { provideGson() }
+        single { provideHttpClient(networkLogging) }
+        single {
+            provideCoinGeckoApi(
+                baseUrl = get(apiBaseUrlNamed),
+                get(),
+                get(),
+            )
+        }
+    }
 
-val repositoryModule = module {
-    single { CoinsMarketsRepository(get(), get()) }
-}
+val storeModule =
+    module {
+        single { GetCoinsMarketsStore(get()) }
+        single { GetCoinChartStore(get()) }
+    }
 
-val useCaseModule = module {
-    factory { GetCoinsMarketsUseCase(get()) }
-    factory { GetCoinChartUseCase(get()) }
-}
+val repositoryModule =
+    module {
+        single { CoinsMarketsRepository(get(), get()) }
+    }
 
-val viewModelModule = module {
-    viewModel { MainViewModel(get(), get(), get()) }
-}
+val useCaseModule =
+    module {
+        factory { GetCoinsMarketsUseCase(get()) }
+        factory { GetCoinChartUseCase(get()) }
+    }
+
+val viewModelModule =
+    module {
+        viewModel { MainViewModel(get(), get(), get()) }
+    }
 
 val apiBaseUrlNamed = named("API_BASE_URL")

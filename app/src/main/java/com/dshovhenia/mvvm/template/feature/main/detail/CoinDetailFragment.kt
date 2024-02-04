@@ -28,19 +28,22 @@ import com.github.mikephil.charting.formatter.IFillFormatter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnClickListener {
-
     @Suppress("DEPRECATION")
     private val coin: CoinMarkets by lazy { arguments?.getParcelable(ARG_COIN)!! }
     private val viewModel: MainViewModel by activityViewModel()
     private lateinit var selectedTextViewTimeFilter: TextView
 
     override fun provideViewBinding(
-        inflater: LayoutInflater, container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
     ): FragmentCoinDetailBinding {
         return FragmentCoinDetailBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         init()
         observeEvents()
@@ -138,51 +141,46 @@ class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnCli
     }
 
     private fun setChartData(cryptoChartData: CryptoChartData?) {
-        val values = ArrayList<Entry>()
-        val chartFillData = cryptoChartData?.prices!!
+        val chartFillData = cryptoChartData?.prices
+        if (chartFillData != null) {
+            val values = ArrayList<Entry>()
+            for (i in chartFillData.indices) {
+                val timestamp = chartFillData[i][0]!!.toFloat()
+                val price = chartFillData[i][1]!!.toFloat()
 
-        for (i in chartFillData.indices) {
-            try {
-                values.add(
-                    Entry(
-                        chartFillData[i][0]!!.toFloat(), // timestamp
-                        chartFillData[i][1]!!.toFloat() // price
-                    )
-                )
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+                values.add(Entry(timestamp, price))
             }
-        }
-        val set: LineDataSet
-        if (binding.chart.data != null && binding.chart.data.dataSetCount > 0) {
-            set = binding.chart.data.getDataSetByIndex(0) as LineDataSet
-            set.values = values
-            binding.chart.data.notifyDataChanged()
-            binding.chart.notifyDataSetChanged()
-        } else {
-            // create a data set and give it a type
-            set = LineDataSet(values, DATA_SET_NAME)
-            set.mode = LineDataSet.Mode.CUBIC_BEZIER
-            set.cubicIntensity = 0.2f
-            set.setDrawFilled(true)
-            set.setDrawCircles(false)
-            set.lineWidth = 1.8f
-            set.circleRadius = 4f
-            set.setCircleColor(Color.BLUE)
-            set.highLightColor = Color.rgb(244, 117, 117)
-            set.color = ContextCompat.getColor(requireContext(), R.color.chart_color)
-            set.fillColor = ContextCompat.getColor(requireContext(), R.color.chart_fill_color)
-            set.setDrawHorizontalHighlightIndicator(true)
-            set.fillFormatter = IFillFormatter { _, _ -> binding.chart.axisLeft.axisMinimum }
+            val set: LineDataSet
+            if (binding.chart.data != null && binding.chart.data.dataSetCount > 0) {
+                set = binding.chart.data.getDataSetByIndex(0) as LineDataSet
+                set.values = values
+                binding.chart.data.notifyDataChanged()
+                binding.chart.notifyDataSetChanged()
+            } else {
+                // create a data set and give it a type
+                set = LineDataSet(values, DATA_SET_NAME)
+                set.mode = LineDataSet.Mode.CUBIC_BEZIER
+                set.cubicIntensity = 0.2f
+                set.setDrawFilled(true)
+                set.setDrawCircles(false)
+                set.lineWidth = 1.8f
+                set.circleRadius = 4f
+                set.setCircleColor(Color.BLUE)
+                set.highLightColor = Color.rgb(244, 117, 117)
+                set.color = ContextCompat.getColor(requireContext(), R.color.chart_color)
+                set.fillColor = ContextCompat.getColor(requireContext(), R.color.chart_fill_color)
+                set.setDrawHorizontalHighlightIndicator(true)
+                set.fillFormatter = IFillFormatter { _, _ -> binding.chart.axisLeft.axisMinimum }
 
-            // create a data object with the data sets
-            val data = LineData(set)
-            data.setValueTextSize(9f)
-            data.setDrawValues(false)
+                // create a data object with the data sets
+                val data = LineData(set)
+                data.setValueTextSize(9f)
+                data.setDrawValues(false)
 
-            binding.chart.data = data
+                binding.chart.data = data
+            }
+            binding.chart.invalidate()
         }
-        binding.chart.invalidate()
     }
 
     override fun onClick(view: View?) {

@@ -1,7 +1,6 @@
 package com.dshovhenia.mvvm.template
 
 object Constants {
-
     const val DATE_FORMAT = "yyyy-MM-dd, HH:mm"
 
     const val API_PARAM_KEY_SYMBOL = "symbol"
@@ -17,5 +16,4 @@ object Constants {
     const val ONE_QUARTER = "90"
     const val ONE_YEAR = "7"
     const val MAX = "max"
-
 }

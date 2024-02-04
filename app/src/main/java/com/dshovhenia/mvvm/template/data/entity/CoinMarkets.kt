@@ -59,5 +59,5 @@ data class CoinMarkets(
     @SerializedName("price_change_percentage_200d_in_currency")
     val priceChangePercentage200dInCurrency: Double? = null,
     @SerializedName("price_change_percentage_1y_in_currency")
-    val priceChangePercentage1yInCurrency: Double? = null
+    val priceChangePercentage1yInCurrency: Double? = null,
 ) : Parcelable

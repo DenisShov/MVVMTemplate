@@ -1,8 +1,12 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -23,14 +27,16 @@ android {
 
     buildTypes {
         getByName("debug") {
-            enableUnitTestCoverage = false
+            enableUnitTestCoverage = true
         }
 
         getByName("release") {
+            enableUnitTestCoverage = false
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
             )
         }
     }
@@ -52,6 +58,10 @@ android {
         }
     }
 
+    lint {
+        ignoreTestSources = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -68,10 +78,11 @@ android {
 dependencies {
     val kotlinVersion = "1.9.10"
     val lifecycleVersion = "2.2.0"
-    val koinVersion = "3.3.1"
+    val koinVersion = "3.4.0"
     val coroutinesVersion = "1.7.3"
     val glideVersion = "4.14.2"
     val navigationVersion = "2.7.6"
+    val detektVersion = "1.23.3"
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
@@ -114,9 +125,47 @@ dependencies {
     // Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    // Detekt formatting plugin
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
+
     // Tests
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
     testImplementation("io.mockk:mockk:1.12.3")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+}
+
+detekt {
+    config.setFrom(project.file("$rootDir/app/detekt-config.yml"))
+    parallel = true
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    basePath = projectDir.absolutePath
+}
+
+ktlint {
+    android.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+
+    reporters {
+        reporter(ReporterType.PLAIN)
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/java/**")
+        include("**/kotlin/**")
+        include("**/test/**")
+    }
+}
+
+val runAllChecks by tasks.registering {
+    dependsOn("detekt")
+    dependsOn("ktlintCheck")
+    dependsOn("test")
+    dependsOn("lint")
+
+    description = "Runs tests, detekt, ktlint and lint checks as single task"
+    group = "Verification"
 }

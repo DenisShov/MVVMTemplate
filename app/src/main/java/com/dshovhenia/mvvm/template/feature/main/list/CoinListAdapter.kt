@@ -13,13 +13,14 @@ import com.dshovhenia.mvvm.template.data.entity.CoinMarkets
 import com.dshovhenia.mvvm.template.databinding.ViewHolderCoinItemBinding
 
 class CoinListAdapter(
-    private var onClickListener: ((coin: CoinMarkets) -> Unit)? = null
+    private var onClickListener: ((coin: CoinMarkets) -> Unit)? = null,
 ) : ListAdapter<CoinMarkets, CoinListAdapter.ViewHolder>(simpleItemCallback()) {
-
     class ViewHolder(val binding: ViewHolderCoinItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: CoinMarkets, onClick: (CoinMarkets) -> Unit) {
+        fun bind(
+            item: CoinMarkets,
+            onClick: (CoinMarkets) -> Unit,
+        ) {
             binding.tvCoinName.text = item.name
             val price = "${item.currentPrice?.formatPrice()} USD"
             binding.tvCoinPrice.text = price
@@ -33,13 +34,20 @@ class CoinListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ViewHolderCoinItemBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
+        val binding =
+            ViewHolderCoinItemBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.bind(item, ::onClick)
     }

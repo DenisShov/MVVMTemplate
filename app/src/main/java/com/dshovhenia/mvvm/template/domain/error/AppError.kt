@@ -7,7 +7,9 @@ import java.net.UnknownHostException
 
 sealed class AppError {
     object MissingNetworkConnection : AppError()
+
     data class GeneralError(val exception: Throwable) : AppError()
+
     data class ApiError(val exception: ApiException) : AppError()
 }
 
