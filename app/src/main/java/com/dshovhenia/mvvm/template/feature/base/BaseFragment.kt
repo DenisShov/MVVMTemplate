@@ -11,7 +11,6 @@ import com.dshovhenia.mvvm.template.domain.error.AppError
 
 @SuppressLint("Registered")
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
-
     private var _binding: VB? = null
     val binding get() = requireNotNull(_binding)
 
@@ -20,12 +19,15 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
      *
      * Example: return FragmentAbcBinding.inflate(inflater, container, false)
      */
-    abstract fun provideViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+    abstract fun provideViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ): VB
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = provideViewBinding(inflater, container)
         return binding.root
@@ -39,5 +41,4 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     fun handleFailure(errorEvent: AppError) {
         (requireActivity() as? BaseActivity<*>)?.handleFailure(errorEvent)
     }
-
 }

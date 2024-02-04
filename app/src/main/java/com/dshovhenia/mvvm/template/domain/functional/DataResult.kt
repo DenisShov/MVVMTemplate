@@ -21,7 +21,10 @@ sealed class DataResult<out SuccessType, out FailureType> {
     val isSuccess get() = this is Success<SuccessType>
     val isFailure get() = this is Failure<FailureType>
 
-    fun fold(onSuccess: (SuccessType) -> Unit, onFailure: (FailureType) -> Unit) {
+    fun fold(
+        onSuccess: (SuccessType) -> Unit,
+        onFailure: (FailureType) -> Unit,
+    ) {
         when (this) {
             is Failure -> onFailure(value)
             is Success -> onSuccess(value)
@@ -41,6 +44,7 @@ sealed class DataResult<out SuccessType, out FailureType> {
     }
 
     fun <L> newFailure(a: L) = Failure(a)
+
     fun <R> newSuccess(b: R) = Success(b)
 
     companion object {

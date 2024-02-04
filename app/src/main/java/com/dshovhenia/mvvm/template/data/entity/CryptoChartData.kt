@@ -1,9 +1,13 @@
 package com.dshovhenia.mvvm.template.data.entity
 
+import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 
 data class CryptoChartData(
-    val market_caps: List<List<BigDecimal?>>,
+    @SerializedName("market_caps")
+    val marketCaps: List<List<BigDecimal?>>,
+    @SerializedName("prices")
     val prices: List<List<BigDecimal?>>,
-    val total_volumes: List<List<BigDecimal?>>
+    @SerializedName("total_volumes")
+    val totalVolumes: List<List<BigDecimal?>>,
 )

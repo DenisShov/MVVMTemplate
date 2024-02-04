@@ -7,19 +7,16 @@ import com.dshovhenia.mvvm.template.data.store.GetCoinsMarketsStore
 
 class CoinsMarketsRepository(
     private val getCoinsMarketsStore: GetCoinsMarketsStore,
-    private val getCoinChartStore: GetCoinChartStore
+    private val getCoinChartStore: GetCoinChartStore,
 ) {
-
     suspend fun getCoinsMarkets(): List<CoinMarkets> {
         return getCoinsMarketsStore.getCoinsMarkets()
     }
 
     suspend fun getCoinChart(
         id: String,
-        map: MutableMap<String, String>
+        map: MutableMap<String, String>,
     ): CryptoChartData {
         return getCoinChartStore.getCoinChart(id, map)
     }
-
-
 }

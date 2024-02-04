@@ -14,18 +14,20 @@ import com.dshovhenia.mvvm.template.feature.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class CoinsListFragment : BaseFragment<FragmentCoinsListBinding>() {
-
     private val viewModel: MainViewModel by activityViewModel()
     private val coinListAdapter = CoinListAdapter(::onCoinClick)
 
     override fun provideViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?
+        container: ViewGroup?,
     ): FragmentCoinsListBinding {
         return FragmentCoinsListBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         observeEvents()

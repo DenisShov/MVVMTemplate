@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 
 @SuppressLint("Registered")
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
-
     lateinit var binding: VB
 
     /**
@@ -32,11 +31,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         showLongSnackBar(binding.root, error.stringRes)
     }
 
-    private fun showLongSnackBar(rootView: View, @StringRes messageRes: Int) {
+    private fun showLongSnackBar(
+        rootView: View,
+        @StringRes messageRes: Int,
+    ) {
         Snackbar.make(
             rootView,
             rootView.resources.getString(messageRes),
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_LONG,
         ).show()
     }
 }

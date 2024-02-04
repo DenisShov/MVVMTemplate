@@ -13,7 +13,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
         setupKoin(this)
@@ -29,7 +28,7 @@ class App : Application() {
                 storeModule,
                 repositoryModule,
                 useCaseModule,
-                viewModelModule
+                viewModelModule,
             )
         }
     }

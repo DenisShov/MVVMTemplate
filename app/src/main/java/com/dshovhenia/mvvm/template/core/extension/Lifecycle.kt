@@ -23,25 +23,22 @@ data class ConsumableEvent<out T>(val content: T) {
 
 fun <T : Any?, L : LiveData<ConsumableEvent<T>>> LifecycleOwner.observeEvents(
     liveData: L,
-    body: (T) -> Unit
-) =
-    liveData.observe(this, EventObserver { body(it) })
+    body: (T) -> Unit,
+) = liveData.observe(this, EventObserver { body(it) })
 
 fun <T : Any?, L : LiveData<T>> LifecycleOwner.observe(
     liveData: L,
-    body: (T) -> Unit
-) =
-    liveData.observe(this, Observer(body))
+    body: (T) -> Unit,
+) = liveData.observe(this, Observer(body))
 
 class EventObserver<T>(private val onEventUnconsumedContent: (T) -> Unit) :
     Observer<ConsumableEvent<T>> {
-    override fun onChanged(event: ConsumableEvent<T>) {
-        event.consume(onEventUnconsumedContent)
+    override fun onChanged(value: ConsumableEvent<T>) {
+        value.consume(onEventUnconsumedContent)
     }
 }
 
 class ConsumableLiveData<T> : LiveData<ConsumableEvent<T>> {
-
     constructor() : super()
 
     constructor(value: T) : super(ConsumableEvent(value))

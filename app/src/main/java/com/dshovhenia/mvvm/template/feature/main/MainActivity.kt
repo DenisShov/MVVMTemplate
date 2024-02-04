@@ -13,7 +13,6 @@ import com.dshovhenia.mvvm.template.feature.main.detail.CoinDetailFragment.Compa
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-
     private val viewModel: MainViewModel by viewModel()
     private val navController: NavController get() = findNavController(R.id.nav_main_fragment)
 

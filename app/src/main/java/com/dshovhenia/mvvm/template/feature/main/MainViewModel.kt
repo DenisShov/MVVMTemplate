@@ -16,9 +16,8 @@ import kotlinx.coroutines.withContext
 class MainViewModel(
     private val dispatcher: CoroutineDispatcher,
     private val getCoinsMarketsUseCase: GetCoinsMarketsUseCase,
-    private val getCoinChartUseCase: GetCoinChartUseCase
+    private val getCoinChartUseCase: GetCoinChartUseCase,
 ) : BaseViewModel() {
-
     val event = ConsumableLiveData<Event>()
     val coins = MutableLiveData<List<CoinMarkets>>()
 

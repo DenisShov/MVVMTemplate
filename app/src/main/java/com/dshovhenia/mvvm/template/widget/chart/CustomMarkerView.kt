@@ -12,7 +12,6 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 
 class CustomMarkerView(context: Context?) : MarkerView(context, R.layout.custom_marker_view) {
-
     private var binding: CustomMarkerViewBinding
     private var mOffset: MPPointF? = null
 
@@ -20,7 +19,10 @@ class CustomMarkerView(context: Context?) : MarkerView(context, R.layout.custom_
         binding = CustomMarkerViewBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    override fun refreshContent(e: Entry, highlight: Highlight) {
+    override fun refreshContent(
+        e: Entry,
+        highlight: Highlight,
+    ) {
         val priceAtPoint = "${e.y.formatPrice()}\n${e.x.formatDate()}"
         binding.textViewEntry.text = priceAtPoint
         super.refreshContent(e, highlight)
