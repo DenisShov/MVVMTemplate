@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 fun provideCoinGeckoApi(
     baseUrl: String,
@@ -38,7 +39,7 @@ private fun OkHttpClient.Builder.addLoggingInterceptor(isLogEnabled: Boolean) =
             return@apply
         }
         val loggingInterceptor =
-            HttpLoggingInterceptor { message -> println(message) }
+            HttpLoggingInterceptor { message -> Timber.i(message) }
                 .apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
