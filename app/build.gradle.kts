@@ -7,6 +7,7 @@ plugins {
     id("kotlin-parcelize")
     id("io.gitlab.arturbosch.detekt")
     id("org.jlleitschuh.gradle.ktlint")
+    id("jacoco")
 }
 
 android {
@@ -130,11 +131,15 @@ dependencies {
 
     // Tests
     testImplementation("junit:junit:4.13.2")
-    testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
-    testImplementation("io.mockk:mockk:1.12.3")
+    testImplementation("io.insert-koin:koin-test:$koinVersion")
+    testImplementation("io.mockk:mockk:1.13.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+    testImplementation("org.amshove.kluent:kluent-android:1.68")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 }
+
+// DETEKT
 
 detekt {
     config.setFrom(project.file("$rootDir/app/detekt-config.yml"))
@@ -143,6 +148,8 @@ detekt {
     autoCorrect = true
     basePath = projectDir.absolutePath
 }
+
+// KTLINT
 
 ktlint {
     android.set(true)
@@ -160,6 +167,8 @@ ktlint {
     }
 }
 
+// RUN ALL CHECKS
+
 val runAllChecks by tasks.registering {
     dependsOn("detekt")
     dependsOn("ktlintCheck")
@@ -168,4 +177,70 @@ val runAllChecks by tasks.registering {
 
     description = "Runs tests, detekt, ktlint and lint checks as single task"
     group = "Verification"
+}
+
+// JACOCO
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+val coverageExcludes =
+    listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/App*.*",
+        "**/*Activity*.*",
+        "**/*Fragment*.*",
+        "jdk.internal.*",
+    )
+
+tasks {
+    create<JacocoReport>("jacocoDevDebugTestReport") {
+        dependsOn("testDevDebugUnitTest")
+
+        reports {
+            html.required.set(true)
+            xml.required.set(true)
+        }
+
+        classDirectories.setFrom(
+            project.fileTree("$buildDir/tmp/kotlin-classes/devDebug") {
+                exclude(coverageExcludes)
+            },
+        )
+        executionData.setFrom(files("$buildDir/jacoco/testDevDebugUnitTest.exec"))
+    }
+}
+
+tasks {
+    create<JacocoCoverageVerification>("jacocoDevDebugCoverageVerification") {
+        group = "verification"
+        description = "Checks for the minimum code coverage level for devDebug variant"
+
+        // Run `jacocoTestReport` before so we will have nice html and xml reports too
+        dependsOn("jacocoDevDebugTestReport")
+        getByName("check").dependsOn(this)
+
+        violationRules {
+            // Please set to true on a real project
+            isFailOnViolation = false
+            rule {
+                limit {
+                    minimum = 0.8.toBigDecimal()
+                }
+            }
+        }
+
+        classDirectories.setFrom(
+            project.fileTree("$buildDir/tmp/kotlin-classes/devDebug") {
+                exclude(coverageExcludes)
+            },
+        )
+        executionData.setFrom(files("$buildDir/jacoco/testDevDebugUnitTest.exec"))
+    }
 }

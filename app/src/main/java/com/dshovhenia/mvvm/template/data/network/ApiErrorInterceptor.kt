@@ -5,14 +5,6 @@ import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.Response
 import timber.log.Timber
-import java.io.IOException
-
-data class ApiError(
-    val errorId: String,
-    val message: String,
-)
-
-class ApiException(val error: ApiError? = null) : IOException()
 
 class ApiErrorInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
