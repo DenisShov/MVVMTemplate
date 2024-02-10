@@ -10,11 +10,12 @@ import com.dshovhenia.mvvm.template.domain.usecase.GetCoinChartUseCase
 import com.dshovhenia.mvvm.template.domain.usecase.GetCoinsMarketsUseCase
 import com.dshovhenia.mvvm.template.feature.base.BaseViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
-    private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val getCoinsMarketsUseCase: GetCoinsMarketsUseCase,
     private val getCoinChartUseCase: GetCoinChartUseCase,
 ) : BaseViewModel() {
@@ -70,9 +71,6 @@ class MainViewModel(
     }
 
     sealed class Event {
-//        object ShowLoading : Event()
-//        object HideLoading : Event()
-
         data class ShowDetailScreen(val coin: CoinMarkets) : Event()
     }
 }
