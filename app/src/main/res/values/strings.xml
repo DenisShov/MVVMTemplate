@@ -19,5 +19,21 @@
     <string name="coin_gecko_logo">CoinGeckoLogo</string>
 
     <string name="coin_image">Coin image</string>
+    <string name="market_data">Market data</string>
+    <string name="not_available">Not available</string>
+
+    <string name="market_cap">Market Cap</string>
+    <string name="trading_volume_24h">Trading Volume 24h</string>
+    <string name="highest_price_24h">Highest Price 24h</string>
+    <string name="lowest_price_24h">Lowest Price 24h</string>
+    <string name="available_supply">Available Supply</string>
+    <string name="total_supply">Total Supply</string>
+    <string name="max_supply">Max Supply</string>
+    <string name="all_time_high_price">All-Time High Price</string>
+    <string name="all_time_high_date">All-Time High Date</string>
+    <string name="all_time_low_price">All-Time Low Price</string>
+    <string name="all_time_low_date">All-Time Low Date</string>
+    <string name="last_updated">Last updated</string>
+
 
 </resources>
