@@ -15,6 +15,26 @@
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
+    <style name="MarketDataText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="MarketDataDescriptionText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="MarketDataValueText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="PoweredByText">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">14sp</item>

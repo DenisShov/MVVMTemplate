@@ -9,8 +9,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dshovhenia.mvvm.template.Constants
 import com.dshovhenia.mvvm.template.R
+import com.dshovhenia.mvvm.template.core.extension.addLinearLayoutManager
 import com.dshovhenia.mvvm.template.core.extension.formatPrice
 import com.dshovhenia.mvvm.template.core.extension.observe
+import com.dshovhenia.mvvm.template.core.extension.toLocalDateTime
 import com.dshovhenia.mvvm.template.data.entity.CoinMarkets
 import com.dshovhenia.mvvm.template.data.entity.CryptoChartData
 import com.dshovhenia.mvvm.template.databinding.FragmentCoinDetailBinding
@@ -26,12 +28,17 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IFillFormatter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnClickListener {
     @Suppress("DEPRECATION")
     private val coin: CoinMarkets by lazy { arguments?.getParcelable(ARG_COIN)!! }
     private val viewModel: MainViewModel by activityViewModel()
     private lateinit var selectedTextViewTimeFilter: TextView
+
+    private val marketDataAdapter = MarketDataAdapter()
 
     override fun provideViewBinding(
         inflater: LayoutInflater,
@@ -59,6 +66,7 @@ class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnCli
         initView()
         initViewModel()
         initChart()
+        initMarketData()
     }
 
     private fun initView() {
@@ -138,6 +146,47 @@ class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnCli
         // set marker
         val customMarker = CustomMarkerView(requireContext())
         binding.chart.marker = customMarker
+    }
+
+    private fun initMarketData() {
+        binding.recyclerView.addLinearLayoutManager()
+        binding.recyclerView.adapter = marketDataAdapter
+        val data =
+            with(coin) {
+                listOf(
+                    Pair(getString(R.string.market_cap), marketCap?.formatPrice().orNotAvailable()),
+                    Pair(getString(R.string.trading_volume_24h), totalVolume?.formatPrice().orNotAvailable()),
+                    Pair(getString(R.string.highest_price_24h), high24h?.formatPrice().orNotAvailable()),
+                    Pair(getString(R.string.lowest_price_24h), low24h?.formatPrice().orNotAvailable()),
+                    Pair(
+                        getString(R.string.available_supply),
+                        circulatingSupply?.formatPrice(withoutSymbol = true).orNotAvailable(),
+                    ),
+                    Pair(
+                        getString(R.string.total_supply),
+                        totalSupply?.formatPrice(withoutSymbol = true).orNotAvailable(),
+                    ),
+                    Pair(
+                        getString(R.string.max_supply),
+                        totalSupply?.formatPrice(withoutSymbol = true).orNotAvailable(),
+                    ),
+                    Pair(getString(R.string.all_time_high_price), ath?.formatPrice().orNotAvailable()),
+                    Pair(
+                        getString(R.string.all_time_high_date),
+                        athDate?.toLocalDateTime()?.format(provideDateFormatter()).orNotAvailable(),
+                    ),
+                    Pair(getString(R.string.all_time_low_price), atl?.formatPrice().orNotAvailable()),
+                    Pair(
+                        getString(R.string.all_time_low_date),
+                        atlDate?.toLocalDateTime()?.format(provideDateFormatter()).orNotAvailable(),
+                    ),
+                    Pair(
+                        getString(R.string.last_updated),
+                        lastUpdated?.toLocalDateTime()?.format(provideDateTimeFormatter()).orNotAvailable(),
+                    ),
+                )
+            }
+        marketDataAdapter.submitList(data)
     }
 
     private fun setChartData(cryptoChartData: CryptoChartData?) {
@@ -237,6 +286,14 @@ class CoinDetailFragment : BaseFragment<FragmentCoinDetailBinding>(), View.OnCli
             else -> {}
         }
     }
+
+    private fun String?.orNotAvailable(): String {
+        return this ?: resources.getString(R.string.not_available)
+    }
+
+    private fun provideDateFormatter() = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.US)
+
+    private fun provideDateTimeFormatter() = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
     companion object {
         const val ARG_COIN = "coin"

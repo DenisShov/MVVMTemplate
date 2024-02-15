@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.dshovhenia.mvvm.template.Constants
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.String
 
 @SuppressLint("SimpleDateFormat")
 fun Float.formatDate(): String {
