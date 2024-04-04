@@ -5,6 +5,7 @@ This is a simple app that displays the list of Crypto Coins obtained using CoinG
 This app uses:
 - Kotlin
 - Coroutines
+- Koin for dependency injection
 - Jetpack Navigation library
 - Retrofit for API calls
 - Glide for images
